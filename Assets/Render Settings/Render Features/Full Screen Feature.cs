@@ -17,8 +17,7 @@ public class FullScreenFeature : ScriptableRendererFeature
     {
         const string ProfilerTag = "Full Screen Pass";
         public FullScreenFeature.FullScreenPassSettings settings;
-        RenderTargetIdentifier colorBuffer, temporaryBuffer;
-        private int temporaryBufferID = Shader.PropertyToID("_TemporaryBuffer");
+        RTHandle colorBuffer, temporaryBuffer;
 
         public FullScreenPass(FullScreenFeature.FullScreenPassSettings passSettings)
         {
@@ -35,10 +34,11 @@ public class FullScreenFeature : ScriptableRendererFeature
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             RenderTextureDescriptor descriptor = renderingData.cameraData.cameraTargetDescriptor;
-            colorBuffer = renderingData.cameraData.renderer.cameraColorTarget;
-
-            cmd.GetTemporaryRT(temporaryBufferID, descriptor, FilterMode.Point);
-            temporaryBuffer = new RenderTargetIdentifier(temporaryBufferID);
+            descriptor.depthBufferBits = 0;
+            descriptor.msaaSamples = 1;
+            colorBuffer = renderingData.cameraData.renderer.cameraColorTargetHandle;
+            RenderingUtils.ReAllocateHandleIfNeeded(ref temporaryBuffer, descriptor, FilterMode.Point,
+                TextureWrapMode.Clamp, name: "_TemporaryBuffer");
         }
 
         // Here you can implement the rendering logic.
@@ -51,7 +51,8 @@ public class FullScreenFeature : ScriptableRendererFeature
             using (new ProfilingScope(cmd, new ProfilingSampler(ProfilerTag)))
             {
                 // HW 4 Hint: Blit from the color buffer to a temporary buffer and *back*.
-                Blit(cmd, colorBuffer, temporaryBuffer, settings.material);
+                Blitter.BlitCameraTexture(cmd, colorBuffer, temporaryBuffer, settings.material, 0);
+                Blitter.BlitCameraTexture(cmd, temporaryBuffer, colorBuffer);
             }
 
             // Execute the command buffer and release it.
@@ -59,11 +60,9 @@ public class FullScreenFeature : ScriptableRendererFeature
             CommandBufferPool.Release(cmd);
         }
 
-        // Cleanup any allocated resources that were created during the execution of this render pass.
-        public override void OnCameraCleanup(CommandBuffer cmd)
+        public void Dispose()
         {
-            if (cmd == null) throw new ArgumentNullException("cmd");
-            cmd.ReleaseTemporaryRT(temporaryBufferID);
+            temporaryBuffer?.Release();
         }
     }
 
@@ -82,6 +81,11 @@ public class FullScreenFeature : ScriptableRendererFeature
         if (renderingData.cameraData.cameraType != CameraType.Game)
             return;
         renderer.EnqueuePass(m_FullScreenPass);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        m_FullScreenPass?.Dispose();
     }
 }
 

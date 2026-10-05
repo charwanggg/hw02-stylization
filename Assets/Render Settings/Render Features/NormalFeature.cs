@@ -29,6 +29,11 @@ public class NormalFeature : ScriptableRendererFeature
         if (renderingData.cameraData.cameraType == CameraType.Game)
             renderer.EnqueuePass(m_NormalsPass);
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        m_NormalsPass?.Dispose();
+    }
 }
 
 class NormalsPass : ScriptableRenderPass
@@ -36,7 +41,7 @@ class NormalsPass : ScriptableRenderPass
     private ProfilingSampler m_ProfilingSampler;
     private FilteringSettings m_FilteringSettings;
     private List<ShaderTagId> m_ShaderTagIdList = new List<ShaderTagId>();
-    private RenderTexture target;
+    private RTHandle target;
     private Material normalsMaterial;
 
     public NormalsPass(RenderTexture targetTexture, LayerMask layerMask, Material mat)
@@ -44,7 +49,8 @@ class NormalsPass : ScriptableRenderPass
         m_ProfilingSampler = new ProfilingSampler("RenderNormals");
         m_FilteringSettings = new FilteringSettings(RenderQueueRange.opaque, layerMask);
 
-        target = targetTexture;
+        if (targetTexture != null)
+            target = RTHandles.Alloc(targetTexture);
 
         m_ShaderTagIdList.Add(new ShaderTagId("DepthOnly")); // Only render DepthOnly pass
         normalsMaterial = mat;
@@ -52,8 +58,11 @@ class NormalsPass : ScriptableRenderPass
 
     public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
     {
-        ConfigureTarget(target);
-        ConfigureClear(ClearFlag.All, Color.black);
+        if (target != null)
+        {
+            ConfigureTarget(target);
+            ConfigureClear(ClearFlag.All, Color.black);
+        }
     }
 
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -77,5 +86,10 @@ class NormalsPass : ScriptableRenderPass
     // Cleanup any allocated resources that were created during the execution of this render pass.
     public override void OnCameraCleanup(CommandBuffer cmd)
     {
+    }
+
+    public void Dispose()
+    {
+        target?.Release();
     }
 }
