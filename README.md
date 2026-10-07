@@ -15,15 +15,19 @@ shadow with procedural texture (togglable per material)
 Procedural Runic Textures  
 
 Edge detection outlines  
-
 Extra Credit:  
 - only objects in the "outline" render layer have outlines
 - outlines have per object color using Per Object Outline Color script component
 - outline colors are animated
 
+Vignette
+
+![](result.png);
+
 Reference (Genshin Impact Official Artwork)
 
 ![](hypostasis.png)
+
 
 
 
