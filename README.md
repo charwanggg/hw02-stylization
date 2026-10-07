@@ -1,6 +1,6 @@
 # HW 2: *3D Stylization*
 
-Controls
+Controls  
 LEFT/RIGHT CLICK: Orbit  
 SPACE: Toggle Display Material  
 P: Party Mode  
@@ -8,15 +8,15 @@ V: Toggle Vignette
 
 Implemented Features
 
-multiple light support
-rim light
-shadow with procedural texture (togglable per material)
+multiple light support  
+rim light  
+shadow with procedural texture (togglable per material)  
 
-Procedural Textures
+Procedural Runic Textures  
 
-Edge detection outlines
+Edge detection outlines  
 
-Extra Credit:
+Extra Credit:  
 - only objects in the "outline" render layer have outlines
 - outlines have per object color using Per Object Outline Color script component
 - outline colors are animated
