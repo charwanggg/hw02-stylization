@@ -28,6 +28,8 @@ Reference (Genshin Impact Official Artwork)
 
 ![](hypostasis.png)
 
+Note: Did not use the normal render texture technique discussed in readme. Unity 6 breaks the render feature provided and gives an alternative way to access normals instead.
+
 
 
 
