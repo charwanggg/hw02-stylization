@@ -1,10 +1,10 @@
 # HW 2: *3D Stylization*
 
 Controls
-LEFT/RIGHT CLICK: Orbit
-SPACE: Toggle Display Material
-P: Party Mode
-V: Toggle Vignette
+LEFT/RIGHT CLICK: Orbit  
+SPACE: Toggle Display Material  
+P: Party Mode  
+V: Toggle Vignette  
 
 Implemented Features
 
@@ -21,7 +21,7 @@ Extra Credit:
 - outlines have per object color using Per Object Outline Color script component
 - outline colors are animated
 
-Reference
+Reference (Genshin Impact Official Artwork)
 
 ![](hypostasis.png)
 
