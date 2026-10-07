@@ -3,15 +3,16 @@ using UnityEngine.Experimental.GlobalIllumination;
 
 public class InteractiveManager : MonoBehaviour
 {
+    private static readonly int VignetteId = Shader.PropertyToID("_Vignette");
+    public static bool isParty;
     [SerializeField] private GameObject[] cubes;
     [SerializeField] private Light plight;
+    [SerializeField] private MeshRenderer centerMesh;
     [SerializeField] private PerObjectOutlineColor perObjectOutlineColor;
     [SerializeField] private HypostasisMaterialSetUp[] hypostasisMaterialSetUp;
     [SerializeField] private GameObject threeHypostasisContainer;
     [SerializeField] private GameObject singleHypostasis;
-
-    public bool isParty;
-
+    [SerializeField] private Material fullScreen;
     private int currInd;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,6 +24,11 @@ public class InteractiveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            float vignette = fullScreen.GetFloat(VignetteId);
+            fullScreen.SetFloat(VignetteId, vignette > 0.5f ? 0f : 1f);
+        }
         if (Input.GetKeyDown(KeyCode.P))
         {
             isParty = !isParty;
@@ -36,7 +42,6 @@ public class InteractiveManager : MonoBehaviour
             {
                 threeHypostasisContainer.SetActive(true);
                 singleHypostasis.SetActive(false);
-                
             }
             else
             {
@@ -53,6 +58,7 @@ public class InteractiveManager : MonoBehaviour
                 }
                 plight.color = setup.lightColor;
                 perObjectOutlineColor.SetOutlineColor(setup.outlineColor);
+                centerMesh.material = hypostasisMaterialSetUp[currInd].EmssiveCenter;
             }
         }
     }
@@ -63,6 +69,7 @@ public class InteractiveManager : MonoBehaviour
 public struct HypostasisMaterialSetUp
 {
     public Material[] materials;
+    public Material EmssiveCenter;
     public Color outlineColor;
     public Color lightColor;
 }

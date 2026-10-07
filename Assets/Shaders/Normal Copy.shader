@@ -2,42 +2,46 @@ Shader "Hidden/Normal Copy"
 {
     SubShader
     {
+        Tags { "RenderPipeline" = "UniversalPipeline" "RenderType" = "Opaque" }
+
         Pass
         {
-            CGPROGRAM
+            Tags { "LightMode" = "UniversalForward" }
+            ZWrite On
+            ZTest LEqual
+
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            struct appdata
+            struct Attributes
             {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
             };
 
-            struct v2f
+            struct Varyings
             {
-                float4 vertex : SV_POSITION;
-                float3 viewNormal : NORMAL;
+                float4 positionHCS : SV_POSITION;
+                float3 normalWS : TEXCOORD0;
             };
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
-
-            v2f vert(appdata v)
+            Varyings vert(Attributes input)
             {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.viewNormal = COMPUTE_VIEW_NORMAL;
-                return o;
+                Varyings output;
+                output.positionHCS = TransformObjectToHClip(input.positionOS.xyz);
+                output.normalWS = TransformObjectToWorldNormal(input.normalOS);
+                return output;
             }
 
-            float4 frag(v2f i) : SV_Target
+            float4 frag(Varyings input) : SV_Target
             {
-                return float4(normalize(i.viewNormal) * 0.5 + 0.5, 0);
+                float3 normalWS = normalize(input.normalWS);
+                return float4(normalWS * 0.5 + 0.5, 1.0);
             }
-            ENDCG
+            ENDHLSL
         }
     }
 }

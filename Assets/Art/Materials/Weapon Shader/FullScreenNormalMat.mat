@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FullScreenOutline
-  m_Shader: {fileID: -6465566751694194690, guid: 6d933ea6e27f41f48878bc61275d15ec,
+  m_Name: FullScreenNormalMat
+  m_Shader: {fileID: -6465566751694194690, guid: a04e006bcb0d78144bc69fa244a484c0,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,10 +24,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _NormalTex:
-        m_Texture: {fileID: 8400000, guid: a80e2f68530a4dd42a070a35c10a80d8, type: 2}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -41,13 +37,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _DepthThreshold: 53.7
-    - _NormalThreshold: 0.07
-    - _OutlineScale: 3
-    - _RobertsCrossMultiplier: 0.7
-    - _Vignette: 0
-    m_Colors:
-    - _NoiseSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    m_Floats: []
+    m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

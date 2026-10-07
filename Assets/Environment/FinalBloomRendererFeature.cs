@@ -56,12 +56,8 @@ public class FinalBloomRendererFeature : ScriptableRendererFeature
         if (bloomPass == null)
             return;
 
-        // Game cameras only
         if (renderingData.cameraData.cameraType != CameraType.Game)
             return;
-
-        // THE IMPORTANT PART:
-        // only execute after the final camera in the stack.
         if (!renderingData.cameraData.resolveFinalTarget)
             return;
 
@@ -145,11 +141,6 @@ public class FinalBloomRendererFeature : ScriptableRendererFeature
 
             material.SetColor(TintID, settings.tint);
 
-
-            // ---------------------------------
-            // Create half-resolution bloom RTs
-            // ---------------------------------
-
             RenderTextureDescriptor desc =
                 cameraData.cameraTargetDescriptor;
 
@@ -192,11 +183,6 @@ public class FinalBloomRendererFeature : ScriptableRendererFeature
                 );
 
 
-            // ---------------------------------
-            // PASS 0
-            // Bright pixels only
-            // ---------------------------------
-
             RenderGraphUtils.BlitMaterialParameters threshold =
                 new(
                     source,
@@ -210,11 +196,6 @@ public class FinalBloomRendererFeature : ScriptableRendererFeature
                 "Final Bloom - Threshold"
             );
 
-
-            // ---------------------------------
-            // PASS 1
-            // Vertical blur
-            // ---------------------------------
 
             RenderGraphUtils.BlitMaterialParameters vertical =
                 new(
@@ -230,11 +211,6 @@ public class FinalBloomRendererFeature : ScriptableRendererFeature
             );
 
 
-            // ---------------------------------
-            // PASS 2
-            // Horizontal blur
-            // ---------------------------------
-
             RenderGraphUtils.BlitMaterialParameters horizontal =
                 new(
                     blurTemp,
@@ -247,13 +223,7 @@ public class FinalBloomRendererFeature : ScriptableRendererFeature
                 horizontal,
                 "Final Bloom - Horizontal"
             );
-
-
-            // ---------------------------------
-            // PASS 3
-            // Add bloom back to final image
-            // ---------------------------------
-
+            
             RenderGraphUtils.BlitMaterialParameters composite =
                 new(
                     blurred,

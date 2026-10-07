@@ -26,7 +26,7 @@ public class NormalFeature : ScriptableRendererFeature
     // This method is called when setting up the renderer once per-camera.
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        if (renderingData.cameraData.cameraType == CameraType.Game)
+        if (renderingData.cameraData.cameraType == CameraType.Game && NormalsTexture != null && normalsMaterial != null)
             renderer.EnqueuePass(m_NormalsPass);
     }
 
@@ -52,7 +52,9 @@ class NormalsPass : ScriptableRenderPass
         if (targetTexture != null)
             target = RTHandles.Alloc(targetTexture);
 
-        m_ShaderTagIdList.Add(new ShaderTagId("DepthOnly")); // Only render DepthOnly pass
+        m_ShaderTagIdList.Add(new ShaderTagId("UniversalForward"));
+        m_ShaderTagIdList.Add(new ShaderTagId("UniversalForwardOnly"));
+        m_ShaderTagIdList.Add(new ShaderTagId("SRPDefaultUnlit"));
         normalsMaterial = mat;
     }
 
