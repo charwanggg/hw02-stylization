@@ -22,7 +22,7 @@ Extra Credit:
 
 Vignette
 
-![](result.png);
+![](result.png)
 
 Reference (Genshin Impact Official Artwork)
 
