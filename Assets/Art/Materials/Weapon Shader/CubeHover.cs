@@ -5,8 +5,10 @@ public class CubeHover : MonoBehaviour
     private static readonly int ManualOffsetId = Shader.PropertyToID("_ManualOffset");
     private const int EnchantmentMaterialIndex = 1;
 
-    [SerializeField] private float height;
-    [SerializeField] private float interval;
+    public static float height = 0.03f;
+    public static float interval = 2f;
+    [SerializeField] private float orbitHeight;
+    [SerializeField] private float orbitRadius;
     float randomOffset;
     Vector3 initialPosition;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

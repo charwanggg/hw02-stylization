@@ -19,6 +19,11 @@ public sealed class PerObjectOutlineColor : MonoBehaviour
         }
     }
 
+    public void SetOutlineColor(Color color)
+    {
+        OutlineColor = color;
+    }
+
     private void OnEnable() => Apply();
 
     private void OnValidate() => Apply();
